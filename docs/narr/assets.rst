@@ -343,31 +343,31 @@ Cache Busting
 
 .. versionadded:: 1.6
 
-In order to maximize performance of a web application, you generally want to 
+In order to maximize performance of a web application, you generally want to
 limit the number of times a particular client requests the same static asset.
-Ideally a client would cache a particular static asset "forever", requiring 
-it to be sent to the client a single time.  The HTTP protocol allows you to 
-send headers with an HTTP response that can instruct a client to cache a 
-particular asset for an amount of time.  As long as the client has a copy of 
+Ideally a client would cache a particular static asset "forever", requiring
+it to be sent to the client a single time.  The HTTP protocol allows you to
+send headers with an HTTP response that can instruct a client to cache a
+particular asset for an amount of time.  As long as the client has a copy of
 the asset in its cache and that cache hasn't expired, the client will use the
-cached copy rather than request a new copy from the server.  The drawback to 
+cached copy rather than request a new copy from the server.  The drawback to
 sending cache headers to the client for a static asset is that at some point
 the static asset may change, and then you'll want the client to load a new copy
-of the asset.  Under normal circumstances you'd just need to wait for the 
-client's cached copy to expire before they get the new version of the static 
+of the asset.  Under normal circumstances you'd just need to wait for the
+client's cached copy to expire before they get the new version of the static
 resource.
 
-A commonly used workaround to this problem is a technique known as "cache 
-busting".  Cache busting schemes generally involve generating a URL for a 
+A commonly used workaround to this problem is a technique known as "cache
+busting".  Cache busting schemes generally involve generating a URL for a
 static asset that changes when the static asset changes.  This way headers can
 be sent along with the static asset instructing the client to cache the asset
 for a very long time.  When a static asset is changed, the URL used to refer to
-it in a web page also changes, so the client sees it as a new resource and 
-requests a copy, regardless of any caching policy set for the resource's old 
+it in a web page also changes, so the client sees it as a new resource and
+requests a copy, regardless of any caching policy set for the resource's old
 URL.
 
-:app:`Pyramid` can be configured to produce cache busting URLs for static 
-assets by passing the optional argument, ``cachebust`` to 
+:app:`Pyramid` can be configured to produce cache busting URLs for static
+assets by passing the optional argument, ``cachebust`` to
 :meth:`~pyramid.config.Configurator.add_static_view`:
 
 .. code-block:: python
@@ -377,7 +377,7 @@ assets by passing the optional argument, ``cachebust`` to
    config.add_static_view(name='static', path='mypackage:folder/static',
                           cachebust=True)
 
-Setting the ``cachebust`` argument instructs :app:`Pyramid` to use a cache 
+Setting the ``cachebust`` argument instructs :app:`Pyramid` to use a cache
 busting scheme which adds the md5 checksum for a static asset as a path segment
 in the asset's URL:
 
@@ -392,19 +392,19 @@ URL.  Supplying the ``cachebust`` argument also causes the static view to set
 headers instructing clients to cache the asset for ten years, unless the
 ``cache_max_age`` argument is also passed, in which case that value is used.
 
-.. note:: 
+.. note::
 
    md5 checksums are cached in RAM so if you change a static resource without
    restarting your application, you may still generate URLs with a stale md5
-   checksum. 
+   checksum.
 
 Disabling the Cache Buster
 ~~~~~~~~~~~~~~~~~~~~~~~~~~
 
 It can be useful in some situations (e.g. development) to globally disable all
 configured cache busters without changing calls to
-:meth:`~pyramid.config.Configurator.add_static_view`.  To do this set the 
-``PYRAMID_PREVENT_CACHEBUST`` environment variable or the 
+:meth:`~pyramid.config.Configurator.add_static_view`.  To do this set the
+``PYRAMID_PREVENT_CACHEBUST`` environment variable or the
 ``pyramid.prevent_cachebust`` configuration value to a true value.
 
 Customizing the Cache Buster

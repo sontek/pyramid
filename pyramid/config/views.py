@@ -34,8 +34,6 @@ from pyramid.interfaces import (
     )
 
 from pyramid import renderers
-from pyramid.static import PathSegmentMd5CacheBuster
-
 from pyramid.compat import (
     string_types,
     urlparse,
@@ -1967,9 +1965,6 @@ def isexception(o):
 
 @implementer(IStaticURLInfo)
 class StaticURLInfo(object):
-    # Indirection for testing
-    _default_cachebust = PathSegmentMd5CacheBuster
-
     def _get_registrations(self, registry):
         try:
             reg = registry._static_url_registrations
@@ -2033,8 +2028,7 @@ class StaticURLInfo(object):
             cb = None
         else:
             cb = extra.pop('cachebust', None)
-        if cb is True:
-            cb = self._default_cachebust()
+
         if cb:
             def cachebust(subpath, kw):
                 subpath_tuple = tuple(subpath.split('/'))
